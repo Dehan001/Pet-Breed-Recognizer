@@ -1,8 +1,8 @@
-remote theme: minimal_mistakes@master
+remote_theme: "minimal-mistakes/minimal-mistakes@master"
 plugins:
   - jekyll-remote-theme
 
-title: Pet Breed Recognizer
-description: An image classification model that classifies 25 different breeds of pets around the world.
+title: "Pet Breed Recognizer"
+description: "An image classification model that classifies 25 different breeds of pets around the world."
 author: 
-  name: Farhan Noor Dehan
+  name: "Farhan Noor Dehan"

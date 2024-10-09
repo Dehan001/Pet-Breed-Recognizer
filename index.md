@@ -1,9 +1,10 @@
 ---
 title: home
-layout: Page
+layout: page
 ---
+
 # Image Recognizer 
-can classify 25 different types of pets breeds.<br>
+This model can classify 25 different types of pet breeds.<br>
 The types are as follows:
 
 ### Dogs:
@@ -40,5 +41,3 @@ The types are as follows:
 23. African Grey Parrot
 24. Lovebird
 25. Canary
-
-
