@@ -3,11 +3,12 @@ title: Pet Breed Recognizer
 layout: page
 ---
 
-<input id="photo" type="file">
+<input id="photo" type="file" accept="image/*">
 <div id="results"></div>
 <script type="module">
     import { Client } from "@gradio/client";
 
+    // Connect to the Gradio client
     const client = await Client.connect("dehannoor3199/pet_breed_recognizer");
 
     async function loaded(reader) {
@@ -15,13 +16,15 @@ layout: page
         const imgSrc = reader.result;
         results.innerHTML = `<br/> <img src="${imgSrc}" width="500">`;
 
-        // Use Gradio client to predict the label of the uploaded image
+        // Convert the Data URL to a Blob
         const response = await fetch(imgSrc);
         const imageBlob = await response.blob();
 
+        // Use Gradio client to predict the label of the uploaded image
         const result = await client.predict("/predict", { image: imageBlob });
         const label = result.data[0].label;
 
+        // Display the predicted label
         results.innerHTML += `<p>${label}</p>`;
     }
 
@@ -33,5 +36,6 @@ layout: page
         }
     }
 
-    photo.addEventListener('input', read);
+    // Listen for file input change
+    photo.addEventListener('change', read);
 </script>
