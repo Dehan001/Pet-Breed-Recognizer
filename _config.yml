@@ -1,0 +1,8 @@
+remote theme: minimal_mistakes@master
+plugins:
+  - jekyll-remote-theme
+
+title: Pet Breed Recognizer
+description: An image classification model that classifies 25 different breeds of pets around the world.
+author: 
+  name: Farhan Noor Dehan
