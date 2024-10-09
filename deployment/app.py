@@ -6,13 +6,13 @@ from PIL import Image
 model = load_learner('pet-breed-recognizer-v2.pkl')
 
 # Get the labels
-cap_labels = model.dls.vocab
+breed_labels = model.dls.vocab
 
 # Define the prediction function
 def recognize_image(image):
     image = Image.fromarray(image).resize((192, 192))
     pred, idx, probs = model.predict(image)
-    return dict(zip(cap_labels, map(float, probs)))
+    return dict(zip(breed_labels, map(float, probs)))
 
 image = gr.Image(type="numpy")  
 label = gr.Label(num_top_classes=5)
