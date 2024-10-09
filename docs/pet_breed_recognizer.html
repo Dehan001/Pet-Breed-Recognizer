@@ -30,32 +30,50 @@ layout: page
 </script> -->
 <input id="photo" type="file">
 <div id="results"></div>
+
 <script type="module">
     import { Client } from "@gradio/client";
 
+    // This function is called once the file is loaded into memory
     async function loaded(reader) {
-        // Get the uploaded image as a Blob
-        const exampleImage = await fetch(reader.result).then(res => res.blob());
+        try {
+            // Convert the uploaded image to a Blob object
+            const exampleImage = await fetch(reader.result).then(res => res.blob());
 
-        // Connect to the pet breed recognizer API
-        const client = await Client.connect("dehannoor3199/pet_breed_recognizer");
+            // Connect to the Pet Breed Recognizer API
+            const client = await Client.connect("dehannoor3199/pet_breed_recognizer");
 
-        // Call the API with the uploaded image
-        const result = await client.predict("/predict", { image: exampleImage });
+            // Call the /predict API with the image blob
+            const result = await client.predict("/predict", { image: exampleImage });
 
-        // Extract the label from the response
-        const label = result.data[0].label;
+            // Extract the label from the result
+            const label = result.data[0].label;
 
-        // Display the image and result in the HTML
-        results.innerHTML = `<br/> <img src="${reader.result}" width="500"> <p>${label}</p>`;
+            // Display the image and its label
+            document.getElementById("results").innerHTML = `
+                <br/> <img src="${reader.result}" width="500"> 
+                <p><strong>Predicted Breed:</strong> ${label}</p>
+            `;
+        } catch (error) {
+            console.error('Error processing image:', error);
+            document.getElementById("results").innerHTML = `
+                <p style="color: red;">Error: Unable to process image or fetch label.</p>
+            `;
+        }
     }
 
+    // Function to handle image file input
     function read() {
-        const reader = new FileReader();
-        reader.addEventListener('load', () => loaded(reader));
-        reader.readAsDataURL(photo.files[0]);
+        const file = document.getElementById("photo").files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.addEventListener('load', () => loaded(reader));
+            reader.readAsDataURL(file);
+        } else {
+            document.getElementById("results").innerHTML = '<p style="color: red;">No file chosen.</p>';
+        }
     }
 
-    // Add the input event listener to trigger image read
-    photo.addEventListener('input', read);
+    // Attach the event listener to the file input
+    document.getElementById("photo").addEventListener('input', read);
 </script>
