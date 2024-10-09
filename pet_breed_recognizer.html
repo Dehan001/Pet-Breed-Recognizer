@@ -1,0 +1,37 @@
+---
+title: Pet Breed Recognizer
+layout: page
+---
+
+<input id="photo" type="file">
+<div id="results"></div>
+<script type="module">
+    import { Client } from "@gradio/client";
+
+    const client = await Client.connect("dehannoor3199/pet_breed_recognizer");
+
+    async function loaded(reader) {
+        // Display the uploaded image
+        const imgSrc = reader.result;
+        results.innerHTML = `<br/> <img src="${imgSrc}" width="500">`;
+
+        // Use Gradio client to predict the label of the uploaded image
+        const response = await fetch(imgSrc);
+        const imageBlob = await response.blob();
+
+        const result = await client.predict("/predict", { image: imageBlob });
+        const label = result.data[0].label;
+
+        results.innerHTML += `<p>${label}</p>`;
+    }
+
+    function read() {
+        const reader = new FileReader();
+        reader.addEventListener('load', () => loaded(reader));
+        if (photo.files.length > 0) {
+            reader.readAsDataURL(photo.files[0]);
+        }
+    }
+
+    photo.addEventListener('input', read);
+</script>
