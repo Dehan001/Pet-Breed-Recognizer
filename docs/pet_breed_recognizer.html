@@ -2,7 +2,7 @@
 title: Pet Breed Recognizer
 layout: page
 ---
-
+<!-- 
 <input id="photo" type="file">
 <div id="results"></div>
 <script>
@@ -26,5 +26,36 @@ layout: page
         reader.readAsDataURL(photo.files[0]);
     }
 
+    photo.addEventListener('input', read);
+</script> -->
+<input id="photo" type="file">
+<div id="results"></div>
+<script type="module">
+    import { Client } from "@gradio/client";
+
+    async function loaded(reader) {
+        // Get the uploaded image as a Blob
+        const exampleImage = await fetch(reader.result).then(res => res.blob());
+
+        // Connect to the pet breed recognizer API
+        const client = await Client.connect("dehannoor3199/pet_breed_recognizer");
+
+        // Call the API with the uploaded image
+        const result = await client.predict("/predict", { image: exampleImage });
+
+        // Extract the label from the response
+        const label = result.data[0].label;
+
+        // Display the image and result in the HTML
+        results.innerHTML = `<br/> <img src="${reader.result}" width="500"> <p>${label}</p>`;
+    }
+
+    function read() {
+        const reader = new FileReader();
+        reader.addEventListener('load', () => loaded(reader));
+        reader.readAsDataURL(photo.files[0]);
+    }
+
+    // Add the input event listener to trigger image read
     photo.addEventListener('input', read);
 </script>
