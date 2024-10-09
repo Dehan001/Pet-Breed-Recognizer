@@ -1,4 +1,4 @@
-remote_theme: "mmistakes/minimal-mistakes@4.24.1" # Example stable version
+remote_theme: daviddarnes/alembic@main # Example stable version
 plugins:
   - jekyll-remote-theme
 
